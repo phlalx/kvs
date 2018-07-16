@@ -1,3 +1,3 @@
 # Key-Value store
 
-This aims to be a RPC-based key-value store.
+This aims to be an RPC-based key-value store.
