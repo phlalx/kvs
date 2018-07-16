@@ -1,0 +1,7 @@
+(jbuild_version 1)
+
+(library
+  ((name mylib)
+      (libraries (core)) 
+      (preprocess (pps (ppx_jane)))
+      (wrapped false) ))

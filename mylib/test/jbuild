@@ -1,0 +1,12 @@
+(jbuild_version 1)
+
+(executables
+   ((names (test_mymodule))
+      (libraries (mylib core oUnit))
+      (preprocess (pps (ppx_jane)))))
+
+ (alias
+ ((name    runtest)
+  (deps    (test_mymodule.bc))
+  (action  (run ${<}))))
+

@@ -1,0 +1,6 @@
+(executable
+ ((public_name myutop)
+  (modes (byte)) 
+  (name main)
+  (link_flags (-linkall))
+  (libraries (utop core mylib))))

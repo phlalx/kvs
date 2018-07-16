@@ -1,0 +1,9 @@
+# Jbuiler/merlin integration
+
+There are some issues with merlin and jbuilder .merlin generated files
+
+https://github.com/ocaml/merlin/issues/761
+
+A fix is to:
+ * remove the ppx_* (except for *runtime-libs/expanders) from the .merlin file,
+ * remove ppx from jbuilder libraries list, only necessary for the pps field.
