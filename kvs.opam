@@ -1,0 +1,22 @@
+opam-version: "1.2.2"
+name: "kvs"
+vers: "0.1"
+maintainer: "phlalx@users.noreply.github.com"
+authors: ["phlalx@users.noreply.github.com"]
+homepage: "https://github.com/phlalx/kvs"
+bug-reports: "https://github.com/phlalx/kvs/issues"
+license: "GPLv3"
+dev-repo: "https://github.com/phlalx/kvs.git"
+build: [
+  ["jbuilder" "build" "-p" name "-j" jobs]
+]
+depends: [                                                                       
+  "core" {>= "v0.9.1"} 
+  "core_extended" {>= "v0.9.0"} 
+  "ppx_jane" {>= "v0.9.0"}
+  "ounit" {>= "2.0.0"}
+  ]      
+available: [ ocaml-version >= "4.05.0" ]
+descr: "
+kvs is a template for a *modern* OCaml command-line application.
+"

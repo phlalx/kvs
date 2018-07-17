@@ -1,0 +1,12 @@
+{
+  "version": "0.1.0",
+  "command": "make",
+  "showOutput": "always",
+  "tasks": [{
+    "taskName": "clean"
+  }, {
+    "taskName": "all",
+    "isBuildCommand": true,
+    "problemMatcher": "$ocamlc"
+  }]
+}

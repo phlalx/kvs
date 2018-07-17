@@ -1,7 +1,10 @@
 (jbuild_version 1)
 
 (library
-  ((name mylib)
-      (libraries (core)) 
+   ((name rpc_common)
+      (libraries (core async)) 
       (preprocess (pps (ppx_jane)))
       (wrapped false) ))
+
+
+
