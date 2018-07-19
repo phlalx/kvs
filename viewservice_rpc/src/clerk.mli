@@ -6,6 +6,10 @@ type t
 val create : client:string -> port:int -> t
 
 val ping : t -> viewnum:int -> Types.view Deferred.t
+
+val get : t -> Types.view Deferred.t
+
+val primary : t -> string Deferred.t 
  
 val terminate : t -> unit Deferred.t
 

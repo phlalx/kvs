@@ -23,3 +23,9 @@ let ping_rpc = Rpc.Rpc.create
   ~version:0
   ~bin_query:bin_int_string
   ~bin_response:Types.bin_view
+
+let get_rpc = Rpc.Rpc.create 
+  ~name:"get"
+  ~version:0
+  ~bin_query:Unit.bin_t
+  ~bin_response:Types.bin_view
