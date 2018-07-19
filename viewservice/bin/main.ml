@@ -10,10 +10,15 @@ let ping (viewnum, host) : Types.view =
   Log.Global.info "Received ping";
   Types.{ viewnum = 0; primary = ""; backup = ""}
 
+let get () : Types.view =
+  Log.Global.info "Received ping";
+  Types.{ viewnum = 0; primary = ""; backup = ""}
+
 (* The list of RPC implementations supported by this server *)
 let implementations =
   [
     Rpc.Rpc.implement Protocol.terminate_rpc (fun () -> terminate);
+    Rpc.Rpc.implement' Protocol.get_rpc (fun () -> get);
     Rpc.Rpc.implement' Protocol.ping_rpc (fun () -> ping);
   ]
 

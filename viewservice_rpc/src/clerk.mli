@@ -1,7 +1,10 @@
 open Core
 open Async
 
-type t
+type t = {
+  client : string;
+  port : int;
+}
 
 val create : client:string -> port:int -> t
 
