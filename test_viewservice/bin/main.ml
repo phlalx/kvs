@@ -2,7 +2,8 @@ open Core
 open Async
 
 let test_viewservice port =
-  let%map view = Wrapper.ping 0 "me" port in
+  let cl = Clerk.create "me" port in
+  let%map view = Clerk.ping cl port in
   view
 
 let timeout = sec 1.0
