@@ -1,4 +1,4 @@
-(* Functions used by the client. Why no error case? *)
+(* Functions used by the client. TODO Why no error case? *)
 
 open Core
 open Async

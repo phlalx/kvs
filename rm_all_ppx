@@ -1,0 +1,1 @@
+find . -name .merlin -exec ./rm_ppx_from_merlin {} \;

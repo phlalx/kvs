@@ -1,8 +1,0 @@
-(jbuild_version 1)
-
-(executables
-   ((names (rpc_client))(public_names (rpc_client))
-      (libraries (rpc_common core async)) 
-      (preprocess (pps (ppx_jane)))))
-
-

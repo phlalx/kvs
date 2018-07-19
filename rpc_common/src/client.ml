@@ -16,9 +16,3 @@ let with_rpc_conn f ~host ~port =
 let wrapper f arg port =
   with_rpc_conn (fun conn -> Rpc.Rpc.dispatch_exn f conn arg)
     ~host ~port
-
-let put = wrapper Protocol.put_rpc
-
-let get = wrapper Protocol.get_rpc
-
-let terminate = wrapper Protocol.terminate_rpc () 

@@ -1,0 +1,10 @@
+(jbuild_version 1)
+
+(library
+   ((name viewservice_rpc)
+      (libraries (core async rpc_common)) 
+      (preprocess (pps (ppx_jane)))
+      (wrapped false) ))
+
+
+

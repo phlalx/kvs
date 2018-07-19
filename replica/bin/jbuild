@@ -1,0 +1,6 @@
+(jbuild_version 1)
+
+(executables
+   ((names (main))(public_names (replica))
+      (libraries (rpc_common replica_rpc core async)) 
+      (preprocess (pps (ppx_jane)))))

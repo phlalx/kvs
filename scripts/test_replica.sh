@@ -10,8 +10,8 @@ cd "$(dirname "$0")"/.. || err "can't cd to project dir"
 PORT=8000
 
 BIN=_build/install/default/bin/
-CLIENT=$BIN/rpc_client
-SERVER=$BIN/server
+CLIENT=$BIN/test_replica
+SERVER=$BIN/replica
 
 $SERVER -p $PORT & 
 SERVER_ID=$!
