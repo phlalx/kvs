@@ -12,7 +12,6 @@ let my_put (x, y) =
   Log.Global.info "Put: map[%s] <- %s" x y;
   Hashtbl.add table ~key:x ~data:y |> ignore
 
-
 let my_get x =
   let y = Hashtbl.find table x in
   let y_str = 
@@ -20,7 +19,7 @@ let my_get x =
     | None -> "None"
     | Some t -> t
   in
-  Log.Global.info "Put: get[%s] -> %s" x y_str;
+  Log.Global.info "Get: map[%s] -> %s" x y_str;
   y
 
 (* The list of RPC implementations supported by this server *)
