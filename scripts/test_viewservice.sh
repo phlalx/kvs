@@ -20,10 +20,11 @@ if ! ps -p $SERVER_ID > /dev/null; then
   err "error launching server" 
 fi
 
-if ! $CLIENT -p $PORT; then 
+if ! $CLIENT -p $PORT ; then 
    kill $SERVER_ID || err "can't kill server"
-   err "can't launch client"
+   echo "killed server"
+   err "client terminate with error"
 fi
-sleep 1
+
 
 kill $SERVER_ID || err "can't kill server"
