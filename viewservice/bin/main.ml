@@ -6,13 +6,34 @@ let bye () : unit =
 
 let terminate () : unit Deferred.t = exit 0
 
+type state = { mutable cur_view : int; views : Types.view Array.t }
+
+let state =
+  let f i = Types.{ viewnum = i; primary = ""; backup = "" } in
+  {
+    cur_view = 0;
+    views = Array.init 100 ~f
+  }
+
 let ping (viewnum, host) : Types.view = 
   Log.Global.info "Received ping";
-  Types.{ viewnum = 0; primary = ""; backup = ""}
+  if viewnum = 0 && state.cur_view = 0 then (
+    state.cur_view <- state.cur_view + 1;
+    state.views.(state.cur_view).primary <- host 
+  ) else if viewnum = 0 && state.cur_view = 1 then (
+    state.cur_view <- state.cur_view + 1;
+    state.views.(state.cur_view).backup <- host 
+  ) else if viewnum < state.cur_view then (
+    
+  ) else (
+    assert false
+  );
+  state.views.(state.cur_view)
 
+ 
 let get () : Types.view =
-  Log.Global.info "Received ping";
-  Types.{ viewnum = 0; primary = ""; backup = ""}
+  Log.Global.info "Received get";
+  state.views.(state.cur_view)
 
 (* The list of RPC implementations supported by this server *)
 let implementations =

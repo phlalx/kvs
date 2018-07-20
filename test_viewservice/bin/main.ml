@@ -7,22 +7,22 @@ let check cl p b n =
   if viewnum <> n then (
     Log.Global.info "wanted viewnum %d, got %d" n viewnum;
     assert false
-  ) else (if primary <> p then (
+  ) else if primary <> p then (
     Log.Global.info "wanted primary %s, got %s" p primary;
     assert false
-  ) else (if backup <> b then (
+  ) else if backup <> b then (
     Log.Global.info "wanted backup %s, got %s" b backup;
     assert false
-  ))) 
+  )
 
 let test_no_primary (cl1, _, _) = 
-  Log.Global.info "Test: First primary 1 ...\n"; 
+  Log.Global.info "Test: First primary 1 ..."; 
   match%map Clerk.primary cl1 with
   | "" -> Log.Global.info " ... Passed"
   | _ -> failwith "there was a primary too soon"
 
 let test_first_primary (cl1, _, _) =
-  Log.Global.info "Test: First primary 1 ...\n"; 
+  Log.Global.info "Test: First primary 1 ..."; 
   let rec test_first_primary_aux cl n = 
     if n = 0 then
        return ()

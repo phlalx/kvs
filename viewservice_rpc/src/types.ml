@@ -5,6 +5,6 @@ let dead_ping = 5
 
 type view = 
   { viewnum : int; 
-    primary : string; 
-    backup : string } 
+    mutable primary : string; 
+    mutable backup : string } 
 [@@deriving bin_io]
