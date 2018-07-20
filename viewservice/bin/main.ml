@@ -8,10 +8,22 @@ let terminate () : unit Deferred.t =
   Log.Global.info "VS: terminate";
   exit 0
 
-
-
 module State = struct 
+
+  let replicas = Hashtbl.Poly.create ()
+
+  let () = 
+    let incr_tick () = 
+      Log.Global.info "VS: tick";
+      Hashtbl.map_inplace replicas ~f:succ
+    in
+    Clock.every Types.ping_interval incr_tick
+
   type state = { mutable cur_view : int; views : Types.view Array.t }
+
+  let ping_replica (p:string) : bool = 
+    Hashtbl.set replicas ~key:p ~data:0; true 
+
 
   let state =
     let f i = Types.{ viewnum = i; primary = ""; backup = "" } in
@@ -19,6 +31,20 @@ module State = struct
       cur_view = 0;
       views = Array.init 100 ~f
     }
+
+  let fail replica =
+    let primary = state.views.(state.cur_view).primary in
+    let backup = state.views.(state.cur_view).backup in
+    state.cur_view <- state.cur_view + 1;
+    if replica = primary then ( 
+      Log.Global.info "VS: primary is dead";
+      state.views.(state.cur_view).primary <- backup;
+      state.views.(state.cur_view).backup <- ""
+    ) else if replica = backup then (
+      Log.Global.info "VS: backup is dead";
+      state.views.(state.cur_view).primary <- primary;
+      state.views.(state.cur_view).backup <- ""
+    ) 
 
   let setup_primary p =
     state.cur_view <- state.cur_view + 1;
@@ -32,7 +58,6 @@ module State = struct
 
   end
 
-
 let ping (viewnum, host) : Types.view = 
   let open State in
   Log.Global.info "VS: Received ping %d from %s" viewnum host;
@@ -42,7 +67,6 @@ let ping (viewnum, host) : Types.view =
   else assert false;
   Log.Global.info "VS: Ping return view %d" state.cur_view;
   state.views.(state.cur_view)
-
  
 let get () : Types.view =
   Log.Global.info "VS: Received get";
