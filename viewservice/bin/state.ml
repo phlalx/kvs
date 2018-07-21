@@ -64,6 +64,8 @@ let () =
 let ping ~viewnum ~host =
   heard_replica host;
   if viewnum = 0 && state.cur_view = 0 then setup_primary host
-  else if viewnum = 0 && state.cur_view = 1 then setup_backup host
+  else if viewnum = 0 && state.views.(state.cur_view).backup = "" then setup_backup host
+  else if viewnum = 0 && state.views.(state.cur_view).primary = host then fail host 
+  else if viewnum = 0 && state.views.(state.cur_view).backup = host then fail host 
   else if viewnum <= state.cur_view then () 
   else assert false
