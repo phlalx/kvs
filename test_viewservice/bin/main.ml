@@ -160,8 +160,8 @@ let set_up_view_with_three_as_primary (cl1, cl2, cl3) =
   let%map vy = Clerk.get cl3 in
   assert (vy.primary = cl3.Clerk.client && vy.backup = "") (* TODO *)
 
-let test_vs_waits_for_primary_to_ack_view (cl1, cl2, cl3) : unit Deferred.t =
-  Log.Global.info "Test: Viewserver waits for primary to ack view..."; 
+let test_vs_waits_for_primary_to_ack_view_1 (cl1, cl2, cl3) : unit Deferred.t =
+  Log.Global.info "Test: Viewserver waits for primary to ack view 1/2..."; 
   let%bind view = Clerk.get cl1 in 
   let action n =
     if n = 0 then
@@ -180,6 +180,51 @@ let test_vs_waits_for_primary_to_ack_view (cl1, cl2, cl3) : unit Deferred.t =
   let%map () = check cl1 cl3.Clerk.client cl1.Clerk.client (view.viewnum + 1) in
   Log.Global.info "Test: ... Passed"
 
+let test_vs_waits_for_primary_to_ack_view_2 (cl1, cl2, cl3) : unit Deferred.t =
+  Log.Global.info "Test: Viewserver waits for primary to ack view 2/2..."; 
+  let%bind view = Clerk.get cl1 in 
+  let action n =
+    if n = 0 then
+      `Finished () |> return
+    else
+      let%bind v = Clerk.ping cl1 view.viewnum in 
+      if v.viewnum > view.viewnum then
+        `Finished () |> return
+      else 
+        let%map () = Clock.after Const.ping_interval in `Repeat (n-1) 
+  in
+  let n = Const.dead_ping * 3 in
+  let%bind () = Deferred.repeat_until_finished n action in
+  let%map () = check cl2 cl3.Clerk.client cl1.Clerk.client view.viewnum in
+  Log.Global.info "Test: ... Passed"
+
+let test_uninitialized_server (cl1, cl2, cl3) : unit Deferred.t =
+  Log.Global.info "Test: uninitialized server can't become primary..."; 
+  let action n =
+    if n = 0 then
+      `Finished () |> return
+    else
+      let%bind v = Clerk.get cl1 in 
+      let%bind _ = Clerk.ping cl1 v.viewnum in 
+      let%bind _ = Clerk.ping cl2 0 in 
+      let%bind _ = Clerk.ping cl3 v.viewnum in 
+      let%map () = Clock.after Const.ping_interval in
+       `Repeat (n-1) 
+  in let action2 n =
+    if n = 0 then
+      `Finished () |> return
+    else
+      let%bind _ = Clerk.ping cl2 0 in 
+      let%map () = Clock.after Const.ping_interval in
+       `Repeat (n-1) 
+  in
+  let n = Const.dead_ping * 2 in
+  let%bind () = Deferred.repeat_until_finished n action in
+  let%bind () = Deferred.repeat_until_finished n action2 in
+  let%map vz = Clerk.get cl2 in 
+  assert (vz.primary <> cl2.client);
+  Log.Global.info "Test: ... Passed"
+
 let test_viewservice port =
   let cl1 = Clerk.create "1" port in
   let cl2 = Clerk.create "2" port in
@@ -193,7 +238,9 @@ let test_viewservice port =
   let%bind () = test_idle_third_server ctx  in
   let%bind () = test_restarted_primary ctx  in
   let%bind () = set_up_view_with_three_as_primary ctx in
-  test_vs_waits_for_primary_to_ack_view ctx
+  let%bind () = test_vs_waits_for_primary_to_ack_view_1 ctx in
+  let%bind () = test_vs_waits_for_primary_to_ack_view_2 ctx in 
+  test_uninitialized_server ctx
 
 let timeout = sec 1.0
 
