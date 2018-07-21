@@ -8,9 +8,9 @@ type t = {
 
 val create : client:string -> port:int -> t
 
-val ping : t -> viewnum:int -> Types.view Deferred.t
+val ping : t -> viewnum:int -> View.t Deferred.t
 
-val get : t -> Types.view Deferred.t
+val get : t -> View.t Deferred.t
 
 val primary : t -> string Deferred.t 
  
