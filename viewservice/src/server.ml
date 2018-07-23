@@ -31,7 +31,7 @@ let implementations =
     Rpc.Rpc.implement' Protocol.ping_rpc (fun () -> ping);
   ]
 
-let process ~port =
+let start ~port =
   (* TODO get rid of this *)
   Signal.handle Signal.terminating ~f:(fun _ -> terminate () |> don't_wait_for);
   Rpc_common.Server.start ~env:() ~port ~implementations ()

@@ -227,7 +227,7 @@ let test_viewservice port =
 
 let process port () : unit Deferred.t = 
   Log.Global.set_level `Info;
-  don't_wait_for (Server.process port);
+  don't_wait_for (Server.start ~port);
   let%bind () = Clock.after (sec 0.5) in
   let%map () = test_viewservice port in
   ()

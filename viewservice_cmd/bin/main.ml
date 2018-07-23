@@ -5,11 +5,11 @@ let () =
   let spec =
     Command.Spec.(
     empty +> 
-    flag "-p" (required int) ~doc:" set RPC port")
+    flag "-p" (required int) ~doc:" set port")
   in
   let command =
     Command.async ~summary:"Viewservice." spec
-      (fun rpc_port () -> Viewservice.Server.process rpc_port)
+      (fun port () -> Viewservice.Server.start ~port)
   in
   Command.run command
 
