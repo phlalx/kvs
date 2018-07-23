@@ -2,7 +2,7 @@
 
 (executables
    ((names (main))(public_names (test_replica))
-      (libraries (rpc_common replica_rpc core async)) 
+      (libraries (rpc_common replica core async)) 
       (preprocess (pps (ppx_jane)))))
 
 

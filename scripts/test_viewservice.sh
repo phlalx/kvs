@@ -12,4 +12,4 @@ PORT=8000
 BIN=_build/install/default/bin/
 CLIENT=$BIN/test_viewservice
 
-$CLIENT -p $PORT
+$CLIENT -p $PORT || err "test view service failed"

@@ -2,8 +2,9 @@ open Core
 open Async
 
 let test_peer port : bool Deferred.t =
-  let%bind () = Wrapper.put ("toto", "tutu") port in
-  match%map Wrapper.get ("toto") port with
+  let cl = Clerk.create port in
+  let%bind () = Clerk.put cl ("toto", "tutu") in
+  match%map Clerk.get cl ("toto") with
   | Some "tutu" ->  true
   | _ -> false
 
@@ -31,6 +32,8 @@ let test_many port =
 
 let process port () : unit Deferred.t = 
   Log.Global.set_level `Info;
+  don't_wait_for (Replica.process port);
+  let%bind () = Clock.after (sec 0.5) in
   let%map res = test_many port in
   ()
 
@@ -40,4 +43,4 @@ let () =
       empty +> 
       flag "-p" (required int) ~doc:"port")
   in
-  Command.async ~summary:"KVS RPC client." spec process |> Command.run 
+  Command.async ~summary:"Replica test." spec process |> Command.run 
