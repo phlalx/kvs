@@ -3,8 +3,7 @@
 (library
    ((name replica)
       (libraries (core async rpc_common)) 
-      (preprocess (pps (ppx_jane)))
-      (wrapped false) ))
+      (preprocess (pps (ppx_jane)))))
 
 
 

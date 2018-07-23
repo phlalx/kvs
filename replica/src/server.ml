@@ -29,6 +29,6 @@ let implementations =
     Rpc.Rpc.implement Protocol.terminate_rpc (fun () -> terminate);
   ]
 
-  let process (rpc_port : int) : unit Deferred.t = 
+  let start ~port =
     Signal.handle Signal.terminating ~f:(fun _ -> terminate () |> don't_wait_for);
-    Rpc_server.start_server ~env:() ~port:rpc_port ~implementations ()
+    Rpc_common.Server.start ~env:() ~port ~implementations ()

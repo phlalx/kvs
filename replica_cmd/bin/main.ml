@@ -9,7 +9,6 @@ let () =
   in
   let command =
     Command.async ~summary:"KVS RPC server." spec
-      (fun rpc_port () -> Replica.process rpc_port)
+      (fun rpc_port () -> Replica.Server.start rpc_port)
   in
   Command.run command
-

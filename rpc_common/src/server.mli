@@ -1,6 +1,6 @@
 open Async
 
-val start_server
+val start
   :  env:'a
   -> ?stop : unit Deferred.t
   -> implementations:'a Rpc.Implementation.t list

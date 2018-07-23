@@ -2,9 +2,9 @@ open Core
 open Async
 
 let test_peer port : bool Deferred.t =
-  let cl = Clerk.create port in
-  let%bind () = Clerk.put cl ("toto", "tutu") in
-  match%map Clerk.get cl ("toto") with
+  let cl = Replica.Clerk.create port in
+  let%bind () = Replica.Clerk.put cl ("toto", "tutu") in
+  match%map Replica.Clerk.get cl ("toto") with
   | Some "tutu" ->  true
   | _ -> false
 
@@ -32,7 +32,7 @@ let test_many port =
 
 let process port () : unit Deferred.t = 
   Log.Global.set_level `Info;
-  don't_wait_for (Replica.process port);
+  don't_wait_for (Replica.Server.start port);
   let%bind () = Clock.after (sec 0.5) in
   let%map res = test_many port in
   ()

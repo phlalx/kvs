@@ -9,7 +9,7 @@ let () =
   in
   let command =
     Command.async ~summary:"Viewservice." spec
-      (fun rpc_port () -> Viewservice.process rpc_port)
+      (fun rpc_port () -> Viewservice.Server.process rpc_port)
   in
   Command.run command
 

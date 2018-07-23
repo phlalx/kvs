@@ -18,5 +18,5 @@ depends: [
   ]      
 available: [ ocaml-version >= "4.05.0" ]
 descr: "
-kvs is a template for a *modern* OCaml command-line application.
+kvs is a primary/backup key-value store.
 "

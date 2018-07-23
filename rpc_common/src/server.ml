@@ -1,7 +1,7 @@
 open Core
 open Async
 
-let start_server ~env ?(stop=Deferred.never ()) ~implementations ~port () =
+let start ~env ?(stop=Deferred.never ()) ~implementations ~port () =
   Log.Global.info "RPC_server: starting server on %d" port;
   let implementations =
     Rpc.Implementations.create_exn ~implementations

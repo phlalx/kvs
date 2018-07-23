@@ -1,5 +1,6 @@
 open Core
 open Async
+open Rpc_common
  
 type t = {
   port : int;

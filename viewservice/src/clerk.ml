@@ -1,5 +1,6 @@
 open Core
 open Async
+open Rpc_common
 
 type t = {
   client : string;
@@ -8,7 +9,7 @@ type t = {
 
 let create ~client ~port = { client; port }
 
-let terminate t = Client.wrapper Protocol.terminate_rpc () t.port
+let terminate t = Rpc_common.Client.wrapper Protocol.terminate_rpc () t.port
 
 let ping t ~viewnum = Client.wrapper Protocol.ping_rpc (viewnum, t.client) t.port
 
