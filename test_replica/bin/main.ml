@@ -1,6 +1,9 @@
 open Core
 open Async
 
+module VSClerk = Viewservice.Clerk
+module RClerk = Replica.Clerk
+
 let test_peer port : bool Deferred.t =
   let cl = Replica.Clerk.create port in
   let%bind () = Replica.Clerk.put cl ("toto", "tutu") in
@@ -17,12 +20,14 @@ let process _ () : unit Deferred.t =
 
   don't_wait_for (Viewservice.Server.start ~port:vs_port);
   let%bind () = Clock.after (sec 0.5) in
-  don't_wait_for (Replica.Server.start ~port:replica_port ~vs_port);
+  let replica = Replica.Server.create ~port:replica_port ~vs_port in
+  don't_wait_for (Replica.Server.start replica);
   let%bind () = Clock.after (sec 0.5) in
-  let _cl_vs = Viewservice.Clerk.create "test_replica" vs_port in
-  let _cl_replica = Replica.Clerk.create replica_port in
-  (* TODO: add a function to terminate the server with terminating the
-           full process *)
+  let vck = VSClerk.create "test_replica" vs_port in
+  (* let ck = RClerk.create replica_port in *)
+  let%bind () = Clock.after (sec 10.) in (* TODO magic constant *)
+  let%bind primary = VSClerk.primary vck in
+  assert (primary = Replica.Server.name replica);
   Deferred.never ()
 
 let () = 

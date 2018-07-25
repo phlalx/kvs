@@ -1,6 +1,12 @@
 open Core
 open Async
 
-val start : port:int -> vs_port:int -> unit Deferred.t 
+type t
 
-val kill : unit -> unit
+val create : port:int -> vs_port:int -> t
+
+val start : t -> unit Deferred.t 
+
+val name : t -> string
+
+val kill : t -> unit
