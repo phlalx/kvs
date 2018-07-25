@@ -1,10 +1,12 @@
 open Core
 open Async
 
-let bye () : unit =
-   don't_wait_for (after (sec 1.0) >>= fun () -> exit 0)
+let terminate_ivar = Ivar.create ()
 
-let terminate () : unit Deferred.t = exit 0
+let kill () : unit = Ivar.fill terminate_ivar ()  
+
+let terminate () : unit Deferred.t = 
+    return (kill ())
 
 let table = Hashtbl.Poly.create ()
 
@@ -30,5 +32,5 @@ let implementations =
   ]
 
   let start ~port ~vs_port =
-    Signal.handle Signal.terminating ~f:(fun _ -> terminate () |> don't_wait_for);
-    Rpc_common.Server.start ~env:() ~port ~implementations ()
+    let stop = Ivar.read terminate_ivar in
+    Rpc_common.Server.start ~stop ~env:() ~port ~implementations ()
